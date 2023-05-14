@@ -125,3 +125,34 @@ It can be disabled in both deployment and serviceAccount config.
 ```yaml
 automountServiceAccountToken: false
 ```
+
+## yaml validation
+
+Of course there are many options, look at [learnk8s](https://learnk8s.io/validating-kubernetes-yaml) for a number of options.
+
+For now lets go with kube-linter
+
+```shell
+wget https://github.com/stackrox/kube-linter/releases/download/v0.6.3/kube-linter-linux
+```
+
+Lets see what our linter says about our yaml
+
+```shell
+kube-linter lint 4.yaml
+```
+
+```shell
+4.yaml: (object: <no namespace>/podinfo apps/v1, Kind=Deployment) container "podinfo" has cpu limit 0 (check: unset-cpu-requirements, remediation: Set CPU requests and limits for your container based on its requirements. Refer to https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits for details.)
+```
+
+It complains on two things.
+
+- no namespace
+- no resource cpu limit set
+
+I do not agree with any of these warnings.
+Namespace can be set in a number of locations, like kustomize files.
+
+And CPU limit creates throttling instead of restart like memory limits does. It's really hard to debug.
+In general don't use CPU limits.
