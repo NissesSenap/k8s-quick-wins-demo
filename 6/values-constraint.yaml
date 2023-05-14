@@ -1,0 +1,83 @@
+constraints:
+  - kind: "K8sPSPAllowPrivilegeEscalationContainer"
+    name: "psp-allow-privilege-escalation-container"
+  - kind: "K8sPSPHostNamespace"
+    name: "psp-host-namespace"
+  - kind: "K8sPSPHostNetworkingPorts"
+    name: "psp-host-network-ports"
+  - kind: "K8sPSPFlexVolumes"
+    name: "psp-flexvolume-drivers"
+  - kind: "K8sPSPPrivilegedContainer"
+    name: "psp-privileged-container"
+  - kind: "K8sPSPProcMount"
+    name: "psp-proc-mount"
+  - kind: "K8sPSPReadOnlyRootFilesystemXenit"
+    name: "psp-readonlyrootfilesystemxenit"
+  - kind: "K8sPSPVolumeTypes"
+    name: "psp-volume-types"
+    parameters:
+      "volumes":
+        - "configMap"
+        - "downwardAPI"
+        - "emptyDir"
+        - "persistentVolumeClaim"
+        - "secret"
+        - "projected"
+        - "csi"
+  - kind: "K8sPSPCapabilities"
+    name: "psp-capabilities"
+    parameters:
+      "allowedCapabilities":
+        - ""
+      "requiredDropCapabilities":
+        - "NET_RAW"
+        - "CAP_SYS_ADMIN"
+  - kind: "K8sBlockNodePort"
+    name: "block-node-port"
+  - kind: "K8sRequiredProbes"
+    name: "required-probes"
+    enforcementAction: dryrun
+    parameters:
+      "probeTypes":
+        - "tcpSocket"
+        - "httpGet"
+        - "exec"
+      "probes":
+        - "readinessProbe"
+  - kind: "SecretsStoreCSIUniqueVolume"
+    name: "unique-volume"
+  - kind: "FluxRequireServiceAccount"
+    name: "require-service-account"
+  - kind: "FluxDisableCrossNamespaceSource"
+    name: "disable-cross-namespace-source"
+  - kind: "K8sExternalIPs"
+    name: "external-ips"
+  - kind: "K8sRequireIngressClass"
+    name: "k8srequireingressclass"
+
+mutationExcludedNamespaces:
+  - "kube-system"
+  - "gatekeeper-system"
+assigns:
+  - name: "container-disallow-privilege-escalation"
+  - name: "container-drop-capabilities"
+  - name: "container-read-only-root-fs"
+  - name: "init-container-disallow-privilege-escalation"
+  - name: "init-container-drop-capabilities"
+  - name: "init-container-read-only-root-fs"
+  - name: "ephemeral-container-disallow-privilege-escalation"
+  - name: "ephemeral-container-drop-capabilities"
+  - name: "pod-serviceaccount-token-false"
+  - name: "pod-default-seccomp"
+
+modifySets:
+
+exclude:
+  - excludedNamespaces:
+      - "kube-system"
+    processes:
+      - "*"
+  - excludedNamespaces:
+      - "gatekeeper-system"
+    processes:
+      - "*"

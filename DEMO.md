@@ -205,4 +205,18 @@ While the deployment don't got any mention of it.
 
 ## More OPA
 
-So lets
+So lets add some more stuff to our OPA config to reach the same config that we had earlier.
+Lets use Xenits helm chart for this.
+
+```shell
+helm repo add gatekeeper-library https://xenitab.github.io/gatekeeper-library/
+helm repo update
+helm upgrade -i --version="0.23.1" gatekeeper-library-templates gatekeeper-library/gatekeeper-library-templates -n gatekeeper-system -f 6/values-templates.yaml
+helm upgrade -i --version="0.23.1" gatekeeper-library-constraints gatekeeper-library/gatekeeper-library-constraints -n gatekeeper-system -f 6/values-constraint.yaml
+```
+
+Now lets see how it looks
+
+```shell
+k rollout restart deployment/podinfo -n grafana
+```
