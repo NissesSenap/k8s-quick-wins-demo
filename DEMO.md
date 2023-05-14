@@ -1,6 +1,6 @@
 # Demo
 
-## 0
+## 0 basic deployment
 
 Create an example app
 
@@ -10,7 +10,7 @@ kubectl create deployment podinfo --image=ghcr.io/stefanprodan/podinfo:6.3.6 --d
 
 Go through 0.yaml
 
-## 1
+## 1 basic securityContext
 
 Lets add spec.template.spec.securityContext.runAsNonRoot
 
@@ -41,7 +41,7 @@ securityContext:
 
 The problem here is of course that we don't know the uid.
 
-## 2
+## 2 securityContext
 
 Lets add a few other settings
 
@@ -58,6 +58,10 @@ securityContext:
       type: RuntimeDefault #
 ```
 
+```shell
+kubectl apply -f 2.yaml
+```
+
 ### Capabilities
 
 Ideally you will drop all capabilities, but due to reasons it might not be possible.
@@ -72,3 +76,52 @@ You need to drop
 Seccomp (Secure Computing) is a feature in the Linux kernel that allows a userspace program to create syscall filters. In the context of containers, these syscall filters are collated into seccomp profiles that can be used to restrict which syscalls and arguments are permitted.
 
 In k8s 1.27, this is enabled by default.
+
+## 3 Requests/limits
+
+Request tells the scheduler where to put your pod. It's extermly important to set good requests if you want high usability of your nodes.
+
+Requests is hard, but lets start to add something
+Getting your developers to add something can be hard. Lets use LimitRange
+
+```shell
+kubectl apply -f 3-1.yaml
+```
+
+We will notice that nothing have changed. This will only hit on new pods. So lets restart podinfo.
+
+```shell
+k rollout restart deployment/podinfo
+```
+
+Lets overwrite the default
+
+```yaml
+resources:
+    limits:
+        memory: 512Mi
+    requests:
+        cpu: 100m
+        memory: 64Mi
+```
+
+```shell
+kubectl apply -f 3.yaml
+```
+
+To get help to generate correct requests use Vertical Pod Autoscaler [VPA](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler).
+To generate VPA for all deployments use [goldilocks](https://www.fairwinds.com/goldilocks).
+
+To make sure that all users set a default request help them with it.
+
+## 4 disable service account token
+
+99% of all deployments don't need service account tokens.
+
+It can be disabled in both deployment and serviceAccount config.
+
+`deployment.spec.template.spec.automountServiceAccountToken`
+
+```yaml
+automountServiceAccountToken: false
+```
