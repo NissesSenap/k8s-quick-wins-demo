@@ -156,3 +156,53 @@ Namespace can be set in a number of locations, like kustomize files.
 
 And CPU limit creates throttling instead of restart like memory limits does. It's really hard to debug.
 In general don't use CPU limits.
+
+## OPA
+
+Less yaml linting and more adminision webhooks and mutating webhooks.
+
+Why not use PSP 2.0 or  Pod Security Admission [PSA](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as it's calledd?
+
+It's to limited and OPA or Kyverno solves more stuff and both projects are well backed.
+
+Lets go with OPA for now, mostly because I know OPA more then Kyverno.
+
+OPA have `constrainttemplate` and `constraint`, templates generates a CRD that you then can use to define which resources that should have specific constraints.
+In constraints it's also where you can ignore specific deployments/namespaces like kube-system for example.
+So we can add multiple constrainttemplates that in the end we don't use, it will "just" create extra CRDs.
+There is also `asigns` that is the CRD that creates mutating webhooks, which actually applies the config that you enforce for you.
+So you don't have to force your developers to learn super complex yaml. Instead let OPA/kyverno do everything for you.
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
+```
+
+[Gatekeeper library](https://github.com/open-policy-agent/gatekeeper-library) like the old PSP rule and others.
+
+My old employer Xenit also had a number of good rules that we [open-sourced](https://github.com/XenitAB/gatekeeper-library/tree/main/library).
+
+Lets revert to using our basic deployment.
+
+```shell
+kubectl apply -f 0.yaml
+```
+
+And lets apply some assign rules.
+Notice that I use `-k` instead of `-f` for kustomize.
+
+``` shell
+kubectl apply -k 5
+```
+
+And for the next rollout we will now see the new setting being applied.
+
+```shell
+k rollout restart deployment/podinfo -n grafana
+```
+
+We will see that the pod got a seccompprofile attached to it self.
+While the deployment don't got any mention of it.
+
+## More OPA
+
+So lets
