@@ -157,6 +157,19 @@ Namespace can be set in a number of locations, like kustomize files.
 And CPU limit creates throttling instead of restart like memory limits does. It's really hard to debug.
 In general don't use CPU limits.
 
+### Thoughts
+
+I don't think a developer should have to add all of these configurations. In general I don't think that your users should need to know about half of them.
+
+In general I think helm and kustomize becomes to complex, especially when you want to follow best practices.
+
+If you think that all the settings should always be in your git repo then I think you should look in to [KRM framework](https://www.innoq.com/en/blog/kustomize-enhancement-with-krm-functions/
+).
+
+There is an excellent [talk](https://www.youtube.com/watch?v=rFtKguVs5jw&ab_channel=CNCF%5BCloudNativeComputingFoundation%5D) around how Shopify manages there yaml by Katrina Verey. That I can recommend looking at.
+
+Or why not use mutating webhooks to enforce best practices?
+
 ## OPA
 
 Less yaml linting and more adminision webhooks and mutating webhooks.
