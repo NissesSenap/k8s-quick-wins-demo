@@ -249,3 +249,30 @@ I really recommend looking at it.
 But in short CVE scanning uses a bunch of meta data and if you delete these resources you will hide the CVEs from the scanners.
 
 ## NetworkPolicy
+
+Use something like this as a default networkpolicy.
+
+```shell
+kubectl apply -f 8.yaml
+```
+
+If you are using [node-local-dns](https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns/) you will need to open a few other ports.
+I can really recommend using node-local-dns.
+
+## service mesh
+
+There are a many many service meshes.
+
+- istio
+- linkerd
+- cilium
+- istio ambient mesh
+- etc.
+
+In general my thinking is that you should only use it if you have compliant reasons to.
+Even linkerd that is very simple to manage compare to istio is very painful.
+The main reason to use something like istio is if you are doing a bunch of JWT stuff that auth and you want your mesh to help out with it.
+
+If you only want/need mTLS look at cilium 1.13 or istio ambient mesh.
+
+If you still want to play with service meshes, at least run Kubenretes in production for a year or 3 before trying it out.
