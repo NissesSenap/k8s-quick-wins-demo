@@ -226,8 +226,26 @@ k rollout restart deployment/podinfo -n grafana
 PDB is stupid
 
 ```shell
-kubectl apply -f 7-1.yaml
+kubectl apply -f 7.yaml
 
 ```shell
 kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
 ```
+
+## Trivy
+
+CVE scanning of images helps you to get a start but it's not perfect.
+Just like binaries you need to trust the source of container images that you download.
+
+```shell
+trivy image ghcr.io/stefanprodan/podinfo:6.3.6
+# Scan not so great image
+trivy image registry.k8s.io/hpa-example
+```
+
+There is a great talk from Kubecon 2023 that talks about how CVE scannings [works](https://www.youtube.com/watch?v=9weGi0csBZM&ab_channel=CNCF%5BCloudNativeComputingFoundation%5D).
+
+I really recommend looking at it.
+But in short CVE scanning uses a bunch of meta data and if you delete these resources you will hide the CVEs from the scanners.
+
+## NetworkPolicy
