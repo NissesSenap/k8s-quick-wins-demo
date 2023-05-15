@@ -234,6 +234,10 @@ Now lets see how it looks
 k rollout restart deployment/podinfo -n grafana
 ```
 
+In the future [ValidatingAdmissionPolicy](https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
+) will be able to remove a bunch of the constraint rules.
+Sadly this is a alpha feature 1.26, so it's a long time until most people will use it.
+
 ## PDB and HPA
 
 PDB is stupid
@@ -289,3 +293,11 @@ The main reason to use something like istio is if you are doing a bunch of JWT s
 If you only want/need mTLS look at cilium 1.13 or istio ambient mesh.
 
 If you still want to play with service meshes, at least run Kubenretes in production for a year or 3 before trying it out.
+
+## Prometheus metrics for security
+
+During kubecon there was a talk called [Kubernetes Defensive Monitoring with Prometheus](https://www.youtube.com/watch?v=Ammf8oJhPkY&list=PLj6h78yzYM2PyrvCoOii4rAopBswfz1p7&index=120&ab_channel=CNCF%5BCloudNativeComputingFoundation%5D),
+they talk about what general k8s metrics you can use to detect anomalies.
+
+It's a great talk and also a good way to learn how to write more advanced promeQl.
+Here you can find the ppt from the [presentation](https://static.sched.com/hosted_files/kccnceu2023/8a/Defensive%20Monitoring%20KubeCon%20EU23%20David%20De%20Torres%20Mirco%20De%20Zorzi.pdf).
