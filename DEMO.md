@@ -220,3 +220,14 @@ Now lets see how it looks
 ```shell
 k rollout restart deployment/podinfo -n grafana
 ```
+
+## PDB and HPA
+
+PDB is stupid
+
+```shell
+kubectl apply -f 7-1.yaml
+
+```shell
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
+```
