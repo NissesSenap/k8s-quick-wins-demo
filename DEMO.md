@@ -39,7 +39,7 @@ securityContext:
     runAsUser: 1000
 ```
 
-The problem here is of course that we don't know the uid.
+The problem here is of course that we don't know the user id.
 
 ## 2 securityContext
 
@@ -76,6 +76,8 @@ You need to drop
 Seccomp (Secure Computing) is a feature in the Linux kernel that allows a userspace program to create syscall filters. In the context of containers, these syscall filters are collated into seccomp profiles that can be used to restrict which syscalls and arguments are permitted.
 
 In k8s 1.27, this is enabled by default.
+
+Lets look at some of the calls that is removed by the [default](https://docs.docker.com/engine/security/seccomp/) seccompprofile
 
 ## 3 Requests/limits
 
@@ -114,9 +116,11 @@ To generate VPA for all deployments use [goldilocks](https://www.fairwinds.com/g
 
 To make sure that all users set a default request help them with it.
 
+Now a days you can resize pods without [restart](https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources//) which makes VPA in auto mode even more interesting.
+
 ## 4 disable service account token
 
-99% of all deployments don't need service account tokens.
+99% of all application deployments don't need service account tokens.
 
 It can be disabled in both deployment and serviceAccount config.
 

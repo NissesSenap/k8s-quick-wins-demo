@@ -9,7 +9,6 @@ spec:
   selector:
     matchLabels:
       app: podinfo
-  strategy: {}
   template:
     metadata:
       labels:
@@ -18,5 +17,3 @@ spec:
       containers:
         - image: ghcr.io/stefanprodan/podinfo:6.3.6
           name: podinfo
-          resources: {}
-status: {}
