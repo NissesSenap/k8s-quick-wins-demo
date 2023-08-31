@@ -214,7 +214,7 @@ kubectl apply -k 5
 And for the next rollout we will now see the new setting being applied.
 
 ```shell
-k rollout restart deployment/podinfo -n grafana
+k rollout restart deployment/podinfo -n default
 ```
 
 We will see that the pod got a seccompprofile attached to it self.
@@ -223,7 +223,14 @@ While the deployment don't got any mention of it.
 ## More OPA
 
 So lets add some more stuff to our OPA config to reach the same config that we had earlier.
-Lets use Xenits helm chart for this.
+
+First delete the old setup to let helm take over the job.
+
+```shell
+kubectl delete -k 5
+```
+
+Now lets use Xenits helm chart for this.
 
 ```shell
 helm repo add gatekeeper-library https://xenitab.github.io/gatekeeper-library/
@@ -240,7 +247,7 @@ k rollout restart deployment/podinfo -n grafana
 
 In the future [ValidatingAdmissionPolicy](https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
 ) will be able to remove a bunch of the constraint rules.
-Sadly this is a alpha feature 1.26, so it's a long time until most people will use it.
+Sadly this is a alpha feature 1.26 and became beta in 1.28, so it's a long time until most people will use it.
 
 ## PDB and HPA
 
