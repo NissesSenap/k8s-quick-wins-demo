@@ -71,6 +71,11 @@ You need to drop
 - NET_RAW
 - SYS_ADMIN
 
+```shell
+cat /proc/$$/status |grep Cap # Look at the Cap of the current process
+capsh --decode=000001ffffffffff # decode the output
+```
+
 ### Seccomp profile
 
 Seccomp (Secure Computing) is a feature in the Linux kernel that allows a userspace program to create syscall filters. In the context of containers, these syscall filters are collated into seccomp profiles that can be used to restrict which syscalls and arguments are permitted.
@@ -78,6 +83,8 @@ Seccomp (Secure Computing) is a feature in the Linux kernel that allows a usersp
 In k8s 1.27, this is enabled by default.
 
 Lets look at some of the calls that is removed by the [default](https://docs.docker.com/engine/security/seccomp/) seccompprofile
+
+Take a look at the [security-profiles-operator](https://github.com/kubernetes-sigs/security-profiles-operator).
 
 ## 3 Requests/limits
 
@@ -116,7 +123,7 @@ To generate VPA for all deployments use [goldilocks](https://www.fairwinds.com/g
 
 To make sure that all users set a default request help them with it.
 
-Now a days you can resize pods without [restart](https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources//) which makes VPA in auto mode even more interesting.
+In 1.27 (alpha) you can resize pods without [restart](https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources//) which makes VPA in auto mode even more interesting.
 
 ## 4 disable service account token
 
@@ -178,7 +185,7 @@ Or why not use mutating webhooks to enforce best practices?
 
 Less yaml linting and more adminision webhooks and mutating webhooks.
 
-Why not use PSP 2.0 or  Pod Security Admission [PSA](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as it's calledd?
+Why not use PSP 2.0 or  Pod Security Admission [PSA](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as it's called?
 
 It's to limited and OPA or Kyverno solves more stuff and both projects are well backed.
 
